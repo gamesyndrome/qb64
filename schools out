@@ -1,0 +1,1599 @@
+SCREEN 13
+_FULLSCREEN
+go& = _SNDOPEN("gameover.ogg")
+te& = _SNDOPEN("theend.ogg")
+win& = _SNDOPEN("win.ogg")
+PRINT "SCHOOLS OUT"
+PRINT "PRESS ANY KEY TO PLAY GAME"
+FILEA$ = "SOSAVEA.DAT"
+FILEB$ = "SOSAVEB.DAT"
+SLEEP
+OPEN FILEA$ FOR BINARY AS #1
+GET #1, 4, HISCO
+IF _FILEEXISTS("SOSAVEB.DAT") GOTO 5
+OPEN FILEB$ FOR RANDOM AS #2
+CLOSE #2
+5
+OPEN FILEB$ FOR INPUT AS #2
+INPUT #2, HISCO$
+CLOSE #1
+CLOSE #2
+10
+_AUTODISPLAY
+COLOR 15, BCLR
+CLS
+MSTRSPCNT = 0
+SCRR = 8
+LIFE = 30
+PLX = 250
+PLY = 107
+PLDER = 1
+GUNPLC = 1
+GERPLC = 1
+PLWGUN = 0
+CROSGET = 1
+CROSS = 0
+GER = 0
+BCLR = 0
+SPLBOKPLC = 1
+SPLBOK = 0
+SPDBOTPLC = 1
+SPDBOT = 0
+EARN = 300000
+TIM = 0
+
+PRINT "HEAD WEST TO GO HOME"
+PRINT "HEAD EAST TO GO TO CHURCH"
+IF LVL = 7 THEN PRINT "SPPED BOOTS COST 200000 POINTS"
+LVL = LVL + 1
+IF LVL = 1 THEN
+    PRINT "LEVEL 1"
+    MSTRSCR = 2
+    MSTRK = 2
+
+    MSTRSPD = 10
+END IF
+IF LVL = 2 THEN
+    PRINT "LEVEL 2"
+    MSTRSCR = 3
+    MSTRK = 2
+
+    MSTRSPD = 9
+END IF
+IF LVL = 3 THEN
+    PRINT "LEVEL 3"
+    MSTRSCR = 3
+    MSTRK = 2
+
+    MSTRSPD = 8
+END IF
+IF LVL = 4 THEN
+    PRINT "LEVEL 4"
+    MSTRSCR = 4
+    MSTRK = 3
+
+    MSTRSPD = 7
+END IF
+IF LVL = 5 THEN
+    PRINT "LEVEL 5"
+    MSTRSCR = 4
+    MSTRK = 3
+
+    MSTRSPD = 7
+END IF
+IF LVL = 6 THEN
+    PRINT "LEVEL 6"
+    MSTRSCR = 5
+    MSTRK = 4
+
+    MSTRSPD = 5
+END IF
+IF LVL = 7 THEN
+    PRINT "LEVEL 7"
+    MSTRSCR = 5
+    MSTRK = 4
+
+    MSTRSPD = 4
+END IF
+IF LVL = 8 THEN
+    PRINT "LEVEL 8 FINAL LEVEL"
+    MSTRSCR = 6
+    MSTRK = 5
+
+    MSTRSPD = 3
+END IF
+
+IF LVL = 1 THEN SHTCLR = 35
+IF LVL = 2 THEN SHTCLR = 53
+IF LVL = 3 THEN SHTCLR = 40
+IF LVL = 4 THEN SHTCLR = 44
+IF LVL = 5 THEN SHTCLR = 15
+IF LVL = 6 THEN SHTCLR = 0
+IF LVL = 7 THEN SHTCLR = 49
+IF LVL = 8 THEN SHTCLR = 187
+SLEEP 6
+BCLR = 120
+
+100
+_DISPLAY
+CLS
+
+COLOR 15, BCLR
+
+IF SPLBOK = 1 THEN SPLBOK$ = "(GOT SBOOK)"
+IF SPLBOK = 0 THEN SPLBOK$ = ""
+IF SPDBOT = 1 THEN SPDBOT$ = "(GOT SP BOOTS)"
+IF SPDBOT = 0 THEN SPDBOT$ = ""
+PRINT "          LIFE|GERNADES:"; GER; "|CROSSES:"; CROSS
+PRINT "TIME:"; TIM; "|SCORE:"; PLSCO;
+PRINT "|HIGH SCORE|"; HISCO$; ":"; HISCO; SPLBOK$; SPDBOT$
+
+TIMF = TIMF + 1
+IF TIMF = 500 THEN
+    TIM = TIM + 1
+    TIMF = 0
+    IF EARN < 300 THEN GOTO 230
+    EARN = EARN - 300
+    230
+END IF
+
+
+
+LIFEB = LIFE + 3
+
+
+LINE (3, 3)-(64, 3), 0
+LINE (3, 4)-(64, 4), 0
+LINE (3, 5)-(64, 5), 0
+LINE (3, 6)-(64, 6), 0
+
+LINE (3, 3)-(LIFEB * 2, 3), 4
+LINE (3, 4)-(LIFEB * 2, 4), 4
+LINE (3, 5)-(LIFEB * 2, 5), 4
+LINE (3, 6)-(LIFEB * 2, 6), 4
+
+
+IF SCRR = 11 AND LVL >= 7 THEN
+    IF SPLBOKPLC = 1 THEN
+        LINE (150, 25)-(150, 31), 4
+        LINE (151, 25)-(151, 31), 4
+        LINE (150, 25)-(150, 31), 4
+        LINE (152, 25)-(152, 31), 4
+        LINE (153, 25)-(153, 31), 4
+        LINE (150, 32)-(152, 32), 15
+        LINE (149, 25)-(149, 32), 4
+    END IF
+END IF
+IF SCRR = 11 AND LVL >= 7 THEN
+    IF SPLBOKPLC = 1 THEN
+        IF PLX >= 149 AND PLX <= 153 THEN
+            IF PLY >= 25 AND PLY <= 32 THEN
+                SPLBOK = 1
+                SPLBOKPLC = 0
+            END IF
+        END IF
+    END IF
+END IF
+IF SCRR = 11 THEN
+    LINE (153, 150)-(157, 150), 15
+    LINE (152, 151)-(158, 151), 15
+    LINE (151, 152)-(159, 152), 15
+    LINE (150, 153)-(160, 153), 15
+    LINE (151, 154)-(159, 154), 15
+    LINE (151, 155)-(159, 155), 15
+    LINE (151, 156)-(159, 156), 15
+    LINE (151, 157)-(159, 157), 15
+    LINE (151, 158)-(159, 158), 15
+    LINE (151, 159)-(159, 159), 15
+    LINE (151, 160)-(159, 160), 15
+    LINE (151, 161)-(159, 161), 15
+    LINE (154, 158)-(156, 158), 7
+    LINE (154, 159)-(156, 159), 7
+    LINE (154, 160)-(156, 160), 7
+    LINE (154, 161)-(156, 161), 7
+    LINE (155, 149)-(155, 144), 15
+    LINE (156, 149)-(156, 144), 15
+    LINE (153, 146)-(157, 146), 15
+END IF
+IF SCRR = 11 AND CROSGET = 1 THEN
+    IF PLX >= 150 AND PLX <= 160 THEN
+        IF PLY >= 150 AND PLY <= 161 THEN
+            CROSS = 3
+            CROSGET = 0
+        END IF
+    END IF
+END IF
+
+IF SCRR = 8 THEN
+    LINE (250, 100)-(280, 100), 15
+    LINE (250, 101)-(280, 101), 15
+    LINE (250, 102)-(280, 102), 15
+    LINE (250, 103)-(280, 103), 15
+    LINE (250, 104)-(280, 104), 15
+    LINE (250, 105)-(280, 105), 15
+    LINE (265, 106)-(280, 106), 15
+    LINE (265, 107)-(280, 107), 15
+    LINE (265, 108)-(280, 108), 15
+    LINE (265, 109)-(280, 109), 15
+    LINE (265, 110)-(280, 110), 15
+    LINE (265, 111)-(280, 111), 15
+END IF
+IF SCRR = 1 THEN
+    LINE (53, 150)-(57, 150), 6
+    LINE (52, 151)-(58, 151), 6
+    LINE (51, 152)-(59, 152), 6
+    LINE (50, 153)-(60, 153), 6
+    LINE (51, 154)-(59, 154), 6
+    LINE (51, 155)-(59, 155), 6
+    LINE (51, 156)-(59, 156), 6
+    LINE (51, 157)-(59, 157), 6
+    LINE (51, 158)-(59, 158), 6
+    LINE (51, 159)-(59, 159), 6
+    LINE (51, 160)-(59, 160), 6
+    LINE (51, 161)-(59, 161), 6
+    LINE (54, 158)-(56, 158), 115
+    LINE (54, 159)-(56, 159), 115
+    LINE (54, 160)-(56, 160), 115
+    LINE (54, 161)-(56, 161), 115
+    IF PLX >= 50 AND PLX <= 60 THEN
+        IF PLY >= 150 AND PLY <= 161 THEN
+            GOTO 25000
+        END IF
+    END IF
+END IF
+
+IF SPLBOK = 1 AND SPLBOKUSE = 1 THEN
+    BCLR = 15
+    MSTR1ON = 0
+    MSTR2ON = 0
+    MSTR3ON = 0
+    MSTR4ON = 0
+    MSTR5ON = 0
+    MSTR6ON = 0
+    FSHTIM = FSHTIM + 1
+    IF FSHTIM = 22 THEN FSHTIM = 0: SPLBOKUSE = 0: SPLBOK = 0: BCLR = 120: PLSCO = PLSCO + 75
+END IF
+
+
+IF PLSHT = 1 AND PLWGUN = 1 THEN
+    IF PLDER = 1 THEN PLBUX = PLX - 5: PLBUY = PLY + 6: PLSHT = 0: PLSHTO = 1
+    IF PLDER = 2 THEN PLBUX = PLX + 7: PLBUY = PLY + 1: PLSHT = 0: PLSHTO = 1
+    IF PLDER = 3 THEN PLBUX = PLX + 6: PLBUY = PLY - 5: PLSHT = 0: PLSHTO = 1
+    IF PLDER = 4 THEN PLBUX = PLX + 1: PLBUY = PLY + 7: PLSHT = 0: PLSHTO = 1
+
+END IF
+
+IF PLWGUN = 1 AND PLSHTO = 1 THEN
+    IF PLDER = 1 THEN PLBUX = PLBUX - 1
+    IF PLDER = 2 THEN PLBUX = PLBUX + 1
+    IF PLDER = 3 THEN PLBUY = PLBUY - 1
+    IF PLDER = 4 THEN PLBUY = PLBUY + 1
+    IF PLBUX > 525 THEN PLSHTO = 0
+    IF PLBUY > 325 THEN PLSHTO = 0
+    IF PLBUX < -12 THEN PLSHTO = 0
+    IF PLBUY < -12 THEN PLSHTO = 0
+
+    PSET (PLBUX, PLBUY), 0
+END IF
+IF GERF = 1 THEN
+    IF GER > 0 THEN
+        IF GERDYS = 0 THEN
+            LINE (GERX + 1, GERY)-(GERX + 2, GERY), 2
+            LINE (GERX, GERY + 1)-(GERX + 3, GERY + 1), 2
+            LINE (GERX, GERY + 2)-(GERX + 3, GERY + 2), 2
+            LINE (GERX + 1, GERY + 3)-(GERX + 2, GERY + 3), 2
+        END IF
+
+        GERTIM = GERTIM + 1
+        IF GERTIM = 450 THEN
+            _SNDPLAYFILE "grenade.ogg"
+            GERTIM = 0
+            GEREX = 1
+            GERON = 0
+            GERDYS = 1
+        END IF
+        GERLST = GERLST + 1
+        IF GERLST = 650 THEN GERLST = 0: GEREX = 0: GERDYS = 0: GERF = 0
+
+        IF GEREX = 1 THEN
+            CIRCLE (GERX, GERY), 10, 4
+            IF MSTR1X >= GERX - 12 AND MSTR1X <= GERX + 12 THEN
+                IF MSTR1Y >= GERY - 12 AND MSTR1Y <= GERY + 12 THEN
+                    MSTR1ON = 0
+                    PLSCO = PLSCO + 25
+                END IF
+            END IF
+            IF MSTR2X >= GERX - 12 AND MSTR2X <= GERX + 12 THEN
+                IF MSTR2Y >= GERY - 12 AND MSTR2Y <= GERY + 12 THEN
+                    MSTR2ON = 0
+                    PLSCO = PLSCO + 25
+                END IF
+            END IF
+            IF MSTR3X >= GERX - 12 AND MSTR3X <= GERX + 12 THEN
+                IF MSTR3Y >= GERY - 12 AND MSTR3Y <= GERY + 12 THEN
+                    MSTR3ON = 0
+                    PLSCO = PLSCO + 25
+                END IF
+            END IF
+            IF MSTR4X >= GERX - 12 AND MSTR4X <= GERX + 12 THEN
+                IF MSTR4Y >= GERY - 12 AND MSTR4Y <= GERY + 12 THEN
+                    MSTR4ON = 0
+                    PLSCO = PLSCO + 25
+                END IF
+            END IF
+            IF MSTR5X >= GERX - 12 AND MSTR5X <= GERX + 12 THEN
+                IF MSTR5Y >= GERY - 12 AND MSTR5Y <= GERY + 12 THEN
+                    MSTR5ON = 0
+                    PLSCO = PLSCO + 25
+                END IF
+            END IF
+            IF MSTR6X >= GERX - 12 AND MSTR6X <= GERX + 12 THEN
+                IF MSTR6Y >= GERY - 12 AND MSTR6Y <= GERY + 12 THEN
+                    MSTR6ON = 0
+                    PLSCO = PLSCO + 25
+                END IF
+            END IF
+        END IF
+        IF GERTHR = 1 THEN
+            IF PLDER = 1 THEN
+                GERX = GERX - 1
+                IF GERX = PLX - 60 THEN
+                    GERTHR = 0
+                    GERON = 1
+                END IF
+            END IF
+            IF PLDER = 2 THEN
+                GERX = GERX + 1
+                IF GERX = PLX + 60 THEN
+                    GERTHR = 0
+                    GERON = 1
+                END IF
+            END IF
+            IF PLDER = 3 THEN
+                GERY = GERY - 1
+                IF GERY = PLY - 60 THEN
+                    GERTHR = 0
+                    GERON = 1
+                END IF
+            END IF
+            IF PLDER = 4 THEN
+                GERY = GERY + 1
+                IF GERY = PLY + 60 THEN
+                    GERTHR = 0
+                    GERON = 1
+                END IF
+            END IF
+        END IF
+    END IF
+END IF
+
+
+
+
+IF CROSTHR = 1 THEN
+    LINE (CROX + 2, CROY)-(CROX + 2, CROY + 3), 15
+    LINE (CROX, CROY + 1)-(CROX + 3, CROY + 1), 15
+    IF PLDER = 1 THEN CROX = CROX - 1
+    IF PLDER = 2 THEN CROX = CROX + 1
+    IF PLDER = 3 THEN CROY = CROY - 1
+    IF PLDER = 4 THEN CROY = CROY + 1
+    IF PLDER = 1 AND MSTR1X >= CROX THEN
+        IF MSTR1Y >= CROY - 7 AND MSTR1Y <= CROY + 7 THEN
+            MSTR1ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 1 AND MSTR2X >= CROX THEN
+        IF MSTR2Y >= CROY - 7 AND MSTR2Y <= CROY + 7 THEN
+            MSTR2ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 1 AND MSTR3X >= CROX THEN
+        IF MSTR3Y >= CROY - 7 AND MSTR3Y <= CROY + 7 THEN
+            MSTR3ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 1 AND MSTR4X >= CROX THEN
+        IF MSTR4Y >= CROY - 7 AND MSTR4Y <= CROY + 7 THEN
+            MSTR4ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 1 AND MSTR5X >= CROX THEN
+        IF MSTR5Y >= CROY - 7 AND MSTR5Y <= CROY + 7 THEN
+            MSTR5ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 1 AND MSTR6X >= CROX THEN
+        IF MSTR6Y >= CROY - 7 AND MSTR6Y <= CROY + 7 THEN
+            MSTR6ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 2 AND MSTR1X <= CROX THEN
+        IF MSTR1Y <= CROY - 7 AND MSTR1Y <= CROY + 7 THEN
+            MSTR1ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 2 AND MSTR2X <= CROX THEN
+        IF MSTR2Y >= CROY - 7 AND MSTR2Y <= CROY + 7 THEN
+            MSTR2ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 2 AND MSTR3X <= CROX THEN
+        IF MSTR3Y >= CROY - 7 AND MSTR3Y <= CROY + 7 THEN
+            MSTR3ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 2 AND MSTR4X <= CROX THEN
+        IF MSTR4Y >= CROY - 7 AND MSTR4Y <= CROY + 7 THEN
+            MSTR4ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 2 AND MSTR5X <= CROX THEN
+        IF MSTR5Y >= CROY - 7 AND MSTR5Y <= CROY + 7 THEN
+            MSTR5ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 2 AND MSTR6X <= CROX THEN
+        IF MSTR6Y >= CROY - 7 AND MSTR6Y <= CROY + 7 THEN
+            MSTR6ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 3 AND MSTR1Y >= CROY THEN
+        IF MSTR1X >= CROX - 7 AND MSTR1X <= CROX + 7 THEN
+            MSTR1ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 3 AND MSTR2Y >= CROY THEN
+        IF MSTR2X >= CROX - 7 AND MSTR2X <= CROX + 7 THEN
+            MSTR2ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 3 AND MSTR3Y >= CROY THEN
+        IF MSTR3X >= CROX - 7 AND MSTR3Y <= CROX + 7 THEN
+            MSTR3ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 3 AND MSTR4Y >= CROY THEN
+        IF MSTR4X >= CROX - 7 AND MSTR4X <= CROX + 7 THEN
+            MSTR4ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 3 AND MSTR5Y >= CROY THEN
+        IF MSTR5X >= CROX - 7 AND MSTR5X <= CROX + 7 THEN
+            MSTR5ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 3 AND MSTR6Y >= CROY THEN
+        IF MSTR6X >= CROX - 7 AND MSTR6X <= CROY + 7 THEN
+            MSTR6ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 4 AND MSTR1Y <= CROY THEN
+        IF MSTR1Y >= CROY - 7 AND MSTR1X <= CROY + 7 THEN
+            MSTR1ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 4 AND MSTR2Y <= CROY THEN
+        IF MSTR2Y >= CROY - 7 AND MSTR2X <= CROX + 7 THEN
+            MSTR2ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 4 AND MSTR3Y <= CROY THEN
+        IF MSTR3X >= CROX - 7 AND MSTR3X <= CROX + 7 THEN
+            MSTR3ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 4 AND MSTR4Y <= CROY THEN
+        IF MSTR4X >= CROX - 7 AND MSTR4X <= CROX + 7 THEN
+            MSTR4ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 4 AND MSTR5Y <= CROY THEN
+        IF MSTR5X >= CROX - 7 AND MSTR5X <= CROX + 7 THEN
+            MSTR5ON = 0
+            GOTO 650
+        END IF
+    END IF
+    IF PLDER = 4 AND MSTR6Y <= CROY THEN
+        IF MSTR6X >= CROX - 7 AND MSTR6X <= CROX + 7 THEN
+            MSTR6ON = 0
+            GOTO 650
+        END IF
+    END IF
+
+
+
+    IF CROX > 350 THEN CROSTHR = 0
+    IF CROY > 300 THEN CROSTHR = 0
+    IF CROX < -12 THEN CROSTHR = 0
+    IF CROY < -12 THEN CROSTHR = 0
+
+END IF
+GOTO 700
+650
+CROSTHR = 0
+CROSSNT = 1
+_SNDPLAYFILE "holy.ogg"
+700
+IF CROSSNT = 1 THEN
+    CIRCLE (CROX, CROY), 12, 11
+    IF MSTR1X >= CROX - 30 AND MSTR1X <= CROX + 30 THEN
+        IF MSTR1Y >= CROY - 30 AND MSTR1X <= CROY + 30 THEN
+            MSTR1ON = 0
+            PLSCO = PLSCO + 50
+            _SNDPLAYFILE "holy.ogg"
+        END IF
+    END IF
+    IF MSTR2X >= CROX - 30 AND MSTR2X <= CROX + 30 THEN
+        IF MSTR2Y >= CROY - 30 AND MSTR2X <= CROY + 30 THEN
+            MSTR2ON = 0
+            PLSCO = PLSCO + 50
+            _SNDPLAYFILE "holy.ogg"
+        END IF
+    END IF
+    IF MSTR3X >= CROX - 30 AND MSTR3X <= CROX + 30 THEN
+        IF MSTR3Y >= CROY - 30 AND MSTR3X <= CROY + 30 THEN
+            MSTR3ON = 0
+            PLSCO = PLSCO + 50
+            _SNDPLAYFILE "holy.ogg"
+        END IF
+    END IF
+    IF MSTR4X >= CROX - 30 AND MSTR4X <= CROX + 30 THEN
+        IF MSTR4Y >= CROY - 30 AND MSTR4X <= CROY + 30 THEN
+            MSTR4ON = 0
+            PLSCO = PLSCO + 50
+            _SNDPLAYFILE "holy.ogg"
+        END IF
+    END IF
+    IF MSTR5X >= CROX - 30 AND MSTR5X <= CROX + 30 THEN
+        IF MSTR5Y >= CROY - 30 AND MSTR5X <= CROY + 30 THEN
+            MSTR5ON = 0
+            PLSCO = PLSCO + 50
+            _SNDPLAYFILE "holy.ogg"
+        END IF
+    END IF
+    IF MSTR6X >= CROX - 30 AND MSTR6X <= CROX + 30 THEN
+        IF MSTR6Y >= CROY - 30 AND MSTR6X <= CROY + 30 THEN
+            MSTR6ON = 0
+            PLSCO = PLSCO + 50
+            _SNDPLAYFILE "holy.ogg"
+        END IF
+    END IF
+    CROSSNTTIM = CROSSNTTIM + 1
+    IF CROSSNTTIM = 2000 THEN
+        CROSSNT = 0
+        CROSSNTTIM = 0
+    END IF
+
+
+
+
+END IF
+
+
+IF PLDER = 1 THEN
+    LINE (PLX, PLY + 1)-(PLX, PLY + 6), SHTCLR
+    LINE (PLX + 1, PLY)-(PLX + 1, PLY + 7), SHTCLR
+    LINE (PLX + 2, PLY)-(PLX + 2, PLY + 7), SHTCLR
+    LINE (PLX + 3, PLY + 1)-(PLX + 3, PLY + 6), SHTCLR
+    LINE (PLX, PLY + 3)-(PLX, PLY + 4), 6
+    LINE (PLX + 1, PLY + 2)-(PLX + 1, PLY + 5), 6
+    LINE (PLX + 2, PLY + 2)-(PLX + 2, PLY + 5), 6
+    LINE (PLX + 3, PLY + 3)-(PLX + 3, PLY + 4), 6
+    IF PLWGUN = 1 THEN LINE (PLX - 4, PLY + 6)-(PLX + 2, PLY + 6), 0
+END IF
+IF PLDER = 2 THEN
+    LINE (PLX, PLY + 1)-(PLX, PLY + 6), SHTCLR
+    LINE (PLX + 1, PLY)-(PLX + 1, PLY + 7), SHTCLR
+    LINE (PLX + 2, PLY)-(PLX + 2, PLY + 7), SHTCLR
+    LINE (PLX + 3, PLY + 1)-(PLX + 3, PLY + 6), SHTCLR
+    LINE (PLX, PLY + 3)-(PLX, PLY + 4), 6
+    LINE (PLX + 1, PLY + 2)-(PLX + 1, PLY + 5), 6
+    LINE (PLX + 2, PLY + 2)-(PLX + 2, PLY + 5), 6
+    LINE (PLX + 3, PLY + 3)-(PLX + 3, PLY + 4), 6
+    IF PLWGUN = 1 THEN LINE (PLX + 6, PLY + 1)-(PLX + 2, PLY + 1), 0
+END IF
+IF PLDER = 3 THEN
+    LINE (PLX + 1, PLY)-(PLX + 6, PLY), SHTCLR
+    LINE (PLX, PLY + 1)-(PLX + 7, PLY + 1), SHTCLR
+    LINE (PLX, PLY + 2)-(PLX + 7, PLY + 2), SHTCLR
+    LINE (PLX + 1, PLY + 3)-(PLX + 6, PLY + 3), SHTCLR
+    LINE (PLX + 3, PLY)-(PLX + 4, PLY), 6
+    LINE (PLX + 2, PLY + 1)-(PLX + 5, PLY + 1), 6
+    LINE (PLX + 2, PLY + 2)-(PLX + 5, PLY + 2), 6
+    LINE (PLX + 3, PLY + 3)-(PLX + 4, PLY + 3), 6
+    IF PLWGUN = 1 THEN LINE (PLX + 6, PLY - 4)-(PLX + 6, PLY + 2), 0
+END IF
+IF PLDER = 4 THEN
+    LINE (PLX + 1, PLY)-(PLX + 6, PLY), SHTCLR
+    LINE (PLX, PLY + 1)-(PLX + 7, PLY + 1), SHTCLR
+    LINE (PLX, PLY + 2)-(PLX + 7, PLY + 2), SHTCLR
+    LINE (PLX + 1, PLY + 3)-(PLX + 6, PLY + 3), SHTCLR
+    LINE (PLX + 3, PLY)-(PLX + 4, PLY), 6
+    LINE (PLX + 2, PLY + 1)-(PLX + 5, PLY + 1), 6
+    LINE (PLX + 2, PLY + 2)-(PLX + 5, PLY + 2), 6
+    LINE (PLX + 3, PLY + 3)-(PLX + 4, PLY + 3), 6
+    IF PLWGUN = 1 THEN LINE (PLX + 1, PLY + 6)-(PLX + 1, PLY + 2), 0
+END IF
+
+
+IF MSTRSCR >= 2 THEN
+    IF MSTR1ON = 0 THEN MSTRSPDS = MSTRSPD
+    IF MSTR2ON = 0 THEN MSTRSPDS = MSTRSPD
+END IF
+IF MSTRSCR >= 3 THEN
+    IF MSTR3ON = 0 THEN MSTRSPDS = MSTRSPD
+END IF
+IF MSTRSCR >= 4 THEN
+    IF MSTR4ON = 0 THEN MSTRSPDS = MSTRSPD
+END IF
+IF MSTRSCR >= 5 THEN
+    IF MSTR5ON = 0 THEN MSTRSPDS = MSTRSPD
+END IF
+IF MSTRSCR = 6 THEN
+    IF MSTR6ON = 0 THEN MSTRSPDS = MSTRSPD
+END IF
+
+
+IF MSTRSCR >= 2 THEN
+    IF MSTR1ON = 0 THEN
+        RANDOMIZE TIMER
+        MSTR1PL = INT(RND * 2)
+        IF MSTR1PL = 0 THEN MSTR1Y = -30
+        IF MSTR1PL = 1 THEN MSTR1Y = 350
+        MSTR1X = -12
+        MSTR1ON = 1
+    END IF
+    IF MSTR2ON = 0 THEN
+        RANDOMIZE TIMER
+        MSTR2PL = INT(RND * 2)
+        IF MSTR2PL = 0 THEN MSTR2Y = -30
+        IF MSTR2PL = 1 THEN MSTR2Y = 350
+        MSTR2X = -12
+        MSTR2ON = 1
+    END IF
+END IF
+IF MSTRSCR >= 3 THEN
+    IF MSTR3ON = 0 THEN
+        RANDOMIZE TIMER
+        MSTR3PL = INT(RND * 2)
+        IF MSTR3PL = 0 THEN MSTR3Y = -30
+        IF MSTR3PL = 1 THEN MSTR3Y = 350
+        MSTR3X = -12
+        MSTR3ON = 1
+    END IF
+END IF
+IF MSTRSCR >= 4 THEN
+    IF MSTR4ON = 0 THEN
+        RANDOMIZE TIMER
+        MSTR4PL = INT(RND * 2)
+        IF MSTR4PL = 0 THEN MSTR4Y = -30
+        IF MSTR4PL = 1 THEN MSTR4Y = 350
+        MSTR4X = -12
+        MSTR4ON = 1
+    END IF
+END IF
+IF MSTRSCR >= 5 THEN
+    IF MSTR5ON = 0 THEN
+        RANDOMIZE TIMER
+        MSTR5PL = INT(RND * 2)
+        IF MSTR5PL = 0 THEN MSTR5Y = -30
+        IF MSTR5PL = 1 THEN MSTR5Y = 350
+        MSTR5X = -12
+        MSTR5ON = 1
+    END IF
+END IF
+IF MSTRSCR = 6 THEN
+    IF MSTR6ON = 0 THEN
+        RANDOMIZE TIMER
+        MSTR6PL = INT(RND * 2)
+        IF MSTR6PL = 0 THEN MSTR6Y = -30
+        IF MSTR6PL = 1 THEN MSTR6Y = 350
+        MSTR6X = -12
+        MSTR6ON = 1
+    END IF
+END IF
+
+IF MSTRSCR >= 2 THEN
+    LINE (MSTR1X + 1, MSTR1Y)-(MSTR1X + 1, MSTR1Y + 6), 0
+    LINE (MSTR1X + 3, MSTR1Y)-(MSTR1X + 3, MSTR1Y + 6), 0
+    LINE (MSTR1X + 5, MSTR1Y)-(MSTR1X + 5, MSTR1Y + 6), 0
+    LINE (MSTR1X, MSTR1Y + 2)-(MSTR1X, MSTR1Y + 4), 0
+    LINE (MSTR1X + 2, MSTR1Y + 2)-(MSTR1X + 2, MSTR1Y + 4), 0
+    LINE (MSTR1X + 4, MSTR1Y + 2)-(MSTR1X + 4, MSTR1Y + 4), 0
+    LINE (MSTR1X + 6, MSTR1Y + 2)-(MSTR1X + 6, MSTR1Y + 4), 0
+    IF PLBUX >= MSTR1X AND PLBUX <= MSTR1X + 6 THEN
+        IF PLBUY >= MSTR1Y AND PLBUY <= MSTR1Y + 6 THEN
+            MSTR1DK = MSTR1DK + 1
+
+            PLSHTO = 0
+            PLBUX = 800
+            PLBUY = 800
+
+            IF MSTR1DK = MSTRK THEN
+                _SNDPLAYFILE "demon.ogg"
+                PLSCO = PLSCO + 25
+                MSTR1DK = 0
+                MSTR1ON = 0
+            END IF
+        END IF
+    END IF
+    IF MSTR1X = PLX AND MSTR1Y = PLY THEN
+        _SNDPLAYFILE "hit.ogg"
+        RANDOMIZE TIMER
+        LT = INT(RND * 2)
+        IF LT = 0 THEN LIFE = LIFE - 1
+        IF LT = 1 THEN LIFE = LIFE - 2
+        MSTR1ON = 0
+        IF LIFE <= 0 THEN GOTO 20000
+    END IF
+    LINE (MSTR2X + 1, MSTR2Y)-(MSTR2X + 1, MSTR2Y + 6), 0
+    LINE (MSTR2X + 3, MSTR2Y)-(MSTR2X + 3, MSTR2Y + 6), 0
+    LINE (MSTR2X + 5, MSTR2Y)-(MSTR2X + 5, MSTR2Y + 6), 0
+    LINE (MSTR2X, MSTR2Y + 2)-(MSTR2X, MSTR2Y + 4), 0
+    LINE (MSTR2X + 2, MSTR2Y + 2)-(MSTR2X + 2, MSTR2Y + 4), 0
+    LINE (MSTR2X + 4, MSTR2Y + 2)-(MSTR2X + 4, MSTR2Y + 4), 0
+    LINE (MSTR2X + 6, MSTR2Y + 2)-(MSTR2X + 6, MSTR2Y + 4), 0
+    IF PLBUX >= MSTR2X AND PLBUX <= MSTR2X + 6 THEN
+        IF PLBUY >= MSTR2Y AND PLBUY <= MSTR2Y + 6 THEN
+            MSTR2DK = MSTR2DK + 1
+            PLSHTO = 0
+            PLBUX = 800
+            PLBUY = 800
+
+            IF MSTR2DK = MSTRK THEN
+                _SNDPLAYFILE "demon.ogg"
+                PLSCO = PLSCO + 25
+                MSTR2DK = 0
+                MSTR2ON = 0
+            END IF
+        END IF
+    END IF
+    IF MSTR2X = PLX AND MSTR2Y = PLY THEN
+        _SNDPLAYFILE "hit.ogg"
+        RANDOMIZE TIMER
+        LT = INT(RND * 2)
+        IF LT = 0 THEN LIFE = LIFE - 1
+        IF LT = 1 THEN LIFE = LIFE - 2
+
+        MSTR2ON = 0
+        IF LIFE <= 0 THEN GOTO 20000
+    END IF
+
+END IF
+
+IF MSTRSCR >= 3 THEN
+    LINE (MSTR3X + 1, MSTR3Y)-(MSTR3X + 1, MSTR3Y + 6), 0
+    LINE (MSTR3X + 3, MSTR3Y)-(MSTR3X + 3, MSTR3Y + 6), 0
+    LINE (MSTR3X + 5, MSTR3Y)-(MSTR3X + 5, MSTR3Y + 6), 0
+    LINE (MSTR3X, MSTR3Y + 2)-(MSTR3X, MSTR3Y + 4), 0
+    LINE (MSTR3X + 2, MSTR3Y + 2)-(MSTR3X + 2, MSTR3Y + 4), 0
+    LINE (MSTR3X + 4, MSTR3Y + 2)-(MSTR3X + 4, MSTR3Y + 4), 0
+    LINE (MSTR3X + 6, MSTR3Y + 2)-(MSTR3X + 6, MSTR3Y + 4), 0
+    IF PLBUX >= MSTR3X AND PLBUX <= MSTR3X + 6 THEN
+        IF PLBUY >= MSTR3Y AND PLBUY <= MSTR3Y + 6 THEN
+            MSTR3DK = MSTR3DK + 1
+            PLSHTO = 0
+            PLBUX = 800
+            PLBUY = 800
+
+            IF MSTR3DK = MSTRK THEN
+                _SNDPLAYFILE "demon.ogg"
+                PLSCO = PLSCO + 25
+                MSTR3DK = 0
+                MSTR3ON = 0
+            END IF
+        END IF
+    END IF
+    IF MSTR3X = PLX AND MSTR3Y = PLY THEN
+        _SNDPLAYFILE "hit.ogg"
+        RANDOMIZE TIMER
+        LT = INT(RND * 2)
+        IF LT = 0 THEN LIFE = LIFE - 1
+        IF LT = 1 THEN LIFE = LIFE - 2
+
+        MSTR3ON = 0
+        IF LIFE <= 0 THEN GOTO 20000
+    END IF
+
+
+END IF
+
+IF MSTRSCR >= 4 THEN
+    LINE (MSTR4X + 1, MSTR4Y)-(MSTR4X + 1, MSTR4Y + 6), 0
+    LINE (MSTR4X + 3, MSTR4Y)-(MSTR4X + 3, MSTR4Y + 6), 0
+    LINE (MSTR4X + 5, MSTR4Y)-(MSTR4X + 5, MSTR4Y + 6), 0
+    LINE (MSTR4X, MSTR4Y + 2)-(MSTR4X, MSTR4Y + 4), 0
+    LINE (MSTR4X + 2, MSTR4Y + 2)-(MSTR4X + 2, MSTR4Y + 4), 0
+    LINE (MSTR4X + 4, MSTR4Y + 2)-(MSTR4X + 4, MSTR4Y + 4), 0
+    LINE (MSTR4X + 6, MSTR4Y + 2)-(MSTR4X + 6, MSTR4Y + 4), 0
+    IF PLBUX >= MSTR4X AND PLBUX <= MSTR4X + 6 THEN
+        IF PLBUY >= MSTR4Y AND PLBUY <= MSTR4Y + 6 THEN
+            MSTR4DK = MSTR4DK + 1
+            PLSHTO = 0
+            PLBUX = 800
+            PLBUY = 800
+
+            IF MSTR4DK = MSTRK THEN
+                _SNDPLAYFILE "demon.ogg"
+                PLSCO = PLSCO + 25
+                MSTR4DK = 0
+                MSTR4ON = 0
+            END IF
+        END IF
+    END IF
+    IF MSTR4X = PLX AND MSTR4Y = PLY THEN
+        _SNDPLAYFILE "hit.ogg"
+        RANDOMIZE TIMER
+        LT = INT(RND * 2)
+        IF LT = 0 THEN LIFE = LIFE - 1
+        IF LT = 1 THEN LIFE = LIFE - 2
+
+        MSTR4ON = 0
+        IF LIFE <= 0 THEN GOTO 20000
+    END IF
+
+END IF
+
+IF MSTRSCR >= 5 THEN
+    LINE (MSTR5X + 1, MSTR5Y)-(MSTR5X + 1, MSTR5Y + 6), 0
+    LINE (MSTR5X + 3, MSTR5Y)-(MSTR5X + 3, MSTR5Y + 6), 0
+    LINE (MSTR5X + 5, MSTR5Y)-(MSTR5X + 5, MSTR5Y + 6), 0
+    LINE (MSTR5X, MSTR5Y + 2)-(MSTR5X, MSTR5Y + 4), 0
+    LINE (MSTR5X + 2, MSTR5Y + 2)-(MSTR5X + 2, MSTR5Y + 4), 0
+    LINE (MSTR5X + 4, MSTR5Y + 2)-(MSTR5X + 4, MSTR5Y + 4), 0
+    LINE (MSTR5X + 6, MSTR5Y + 2)-(MSTR5X + 6, MSTR5Y + 4), 0
+    IF PLBUX >= MSTR5X AND PLBUX <= MSTR5X + 6 THEN
+        IF PLBUY >= MSTR5Y AND PLBUY <= MSTR5Y + 6 THEN
+            MSTR5DK = MSTR5DK + 1
+            PLSHTO = 0
+            PLBUX = 800
+            PLBUY = 800
+
+            IF MSTR5DK = MSTRK THEN
+                _SNDPLAYFILE "demon.ogg"
+                PLSCO = PLSCO + 25
+                MSTR5DK = 0
+                MSTR5ON = 0
+            END IF
+        END IF
+    END IF
+    IF MSTR5X = PLX AND MSTR5Y = PLY THEN
+        _SNDPLAYFILE "hit.ogg"
+        RANDOMIZE TIMER
+        LT = INT(RND * 2)
+        IF LT = 0 THEN LIFE = LIFE - 1
+        IF LT = 1 THEN LIFE = LIFE - 2
+
+        MSTR5ON = 0
+        IF LIFE <= 0 THEN GOTO 20000
+    END IF
+
+END IF
+
+IF MSTRSCR = 6 THEN
+    LINE (MSTR6X + 1, MSTR6Y)-(MSTR6X + 1, MSTR6Y + 6), 0
+    LINE (MSTR6X + 3, MSTR6Y)-(MSTR6X + 3, MSTR6Y + 6), 0
+    LINE (MSTR6X + 5, MSTR6Y)-(MSTR6X + 5, MSTR6Y + 6), 0
+    LINE (MSTR6X, MSTR6Y + 2)-(MSTR6X, MSTR6Y + 4), 0
+    LINE (MSTR6X + 2, MSTR6Y + 2)-(MSTR6X + 2, MSTR6Y + 4), 0
+    LINE (MSTR6X + 4, MSTR6Y + 2)-(MSTR6X + 4, MSTR6Y + 4), 0
+    LINE (MSTR6X + 6, MSTR6Y + 2)-(MSTR6X + 6, MSTR6Y + 4), 0
+    IF PLBUX >= MSTR6X AND PLBUX <= MSTR6X + 6 THEN
+        IF PLBUY >= MSTR6Y AND PLBUY <= MSTR6Y + 6 THEN
+            MSTR6DK = MSTR6DK + 1
+            PLSHTO = 0
+            PLBUX = 800
+            PLBUY = 800
+            IF MSTR6DK = MSTRK THEN
+                _SNDPLAYFILE "demon.ogg"
+                PLSCO = PLSCO + 25
+                MSTR6DK = 0
+                MSTR6ON = 0
+            END IF
+        END IF
+    END IF
+    IF MSTR6X = PLX AND MSTR6Y = PLY THEN
+        _SNDPLAYFILE "hit.ogg"
+        RANDOMIZE TIMER
+        LT = INT(RND * 2)
+        IF LT = 0 THEN LIFE = LIFE - 1
+        IF LT = 1 THEN LIFE = LIFE - 2
+
+        MSTR6ON = 0
+        IF LIFE <= 0 THEN GOTO 20000
+    END IF
+
+
+END IF
+MSTRSPCNT = MSTRSPCNT + 1
+IF MSTRSPCNT = MSTRSPD THEN
+    MSTRSPCNT = 0
+
+    IF MSTRSCR >= 2 THEN
+        IF MSTR1X < PLX THEN MSTR1X = MSTR1X + 1
+        IF MSTR1X > PLX THEN MSTR1X = MSTR1X - 1
+        IF MSTR1Y < PLY THEN MSTR1Y = MSTR1Y + 1
+        IF MSTR1Y > PLY THEN MSTR1Y = MSTR1Y - 1
+
+        IF MSTR2X < PLX THEN MSTR2X = MSTR2X + 1
+        IF MSTR2X > PLX THEN MSTR2X = MSTR2X - 1
+        IF MSTR2Y < PLY THEN MSTR2Y = MSTR2Y + 1
+        IF MSTR2Y > PLY THEN MSTR2Y = MSTR2Y - 1
+
+    END IF
+    IF MSTRSCR >= 3 THEN
+        IF MSTR3X < PLX THEN MSTR3X = MSTR3X + 1
+        IF MSTR3X > PLX THEN MSTR3X = MSTR3X - 1
+        IF MSTR3Y < PLY THEN MSTR3Y = MSTR3Y + 1
+        IF MSTR3Y > PLY THEN MSTR3Y = MSTR3Y - 1
+
+    END IF
+    IF MSTRSCR >= 4 THEN
+        IF MSTR4X < PLX THEN MSTR4X = MSTR4X + 1
+        IF MSTR4X > PLX THEN MSTR4X = MSTR4X - 1
+        IF MSTR4Y < PLY THEN MSTR4Y = MSTR4Y + 1
+        IF MSTR4Y > PLY THEN MSTR4Y = MSTR4Y - 1
+
+    END IF
+    IF MSTRSCR >= 5 THEN
+        IF MSTR5X < PLX THEN MSTR5X = MSTR5X + 1
+        IF MSTR5X > PLX THEN MSTR5X = MSTR5X - 1
+        IF MSTR5Y < PLY THEN MSTR5Y = MSTR5Y + 1
+        IF MSTR5Y > PLY THEN MSTR5Y = MSTR5Y - 1
+
+    END IF
+    IF MSTRSCR = 6 THEN
+        IF MSTR6X < PLX THEN MSTR6X = MSTR6X + 1
+        IF MSTR6X > PLX THEN MSTR6X = MSTR6X - 1
+        IF MSTR6Y < PLY THEN MSTR6Y = MSTR6Y + 1
+        IF MSTR6Y > PLY THEN MSTR6Y = MSTR6Y - 1
+
+    END IF
+
+END IF
+IF MSTR1ON = 0 THEN MSTRSPDC = 0
+IF MSTR2ON = 0 THEN MSTRSPDC = 0
+IF MSTR3ON = 0 THEN MSTRSPDC = 0
+IF MSTR4ON = 0 THEN MSTRSPDC = 0
+IF MSTR5ON = 0 THEN MSTRSPDC = 0
+IF MSTR6ON = 0 THEN MSTRSPDC = 0
+
+
+IF SPDPUT = 1 THEN SPDTIM = SPDTIM + 1
+IF SPDTIM = 10 THEN SPDTIM = 0: SPDPUT = 0
+
+IF SPDPUT = 1 THEN
+    IF PLDER = 1 THEN PLX = PLX - 1
+    IF PLDER = 2 THEN PLX = PLX + 1
+    IF PLDER = 3 THEN PLY = PLY - 1
+    IF PLDER = 4 THEN PLY = PLY + 1
+END IF
+
+IF SPDBOTPLC = 1 THEN
+    IF SCRR = 9 THEN
+        IF LVL = 7 THEN
+            LINE (100, 100)-(102, 100), 1
+            LINE (100, 100)-(102, 101), 1
+            LINE (100, 102)-(102, 102), 1
+            LINE (100, 103)-(105, 103), 1
+            LINE (100, 104)-(105, 104), 1
+            LINE (100, 105)-(106, 105), 1
+        END IF
+    END IF
+END IF
+IF SPDBOTPLC = 1 AND SCRR = 9 THEN
+    IF PLX >= 100 AND PLX <= 105 THEN
+        IF PLX > 100 AND PLY <= 106 THEN
+            IF PLSCO >= 200000 AND LVL = 7 THEN
+                PLSCO = PLSCO - 200000
+                SPDBOTPLC = 0
+                SPDBOT = 1
+            END IF
+        END IF
+    END IF
+END IF
+IF GUNPLC = 1 THEN
+    IF SCRR = 8 THEN
+        LINE (180, 140)-(186, 140), 0
+        LINE (186, 140)-(186, 144), 0
+        LINE (184, 140)-(184, 142), 0
+        LINE (184, 142)-(186, 142), 0
+        IF PLX >= 180 AND PLX <= 186 THEN
+            IF PLY >= 140 AND PLY <= 144 THEN
+                GUNPLC = 0
+                PLWGUN = 1
+            END IF
+        END IF
+
+    END IF
+END IF
+IF GERPLC = 1 AND SCRR = 8 THEN
+    IF LVL >= 4 THEN
+        LINE (180, 180)-(183, 180), 2
+        LINE (179, 181)-(184, 181), 2
+        LINE (179, 182)-(184, 182), 2
+        LINE (180, 183)-(183, 183), 2
+        IF PLX >= 179 AND PLX <= 184 THEN
+            IF PLY >= 180 AND PLY <= 183 THEN
+                GER = 15
+                GERPLC = 0
+            END IF
+        END IF
+
+    END IF
+END IF
+IF PLX < -14 THEN
+    PLX = 350
+    SCRR = SCRR - 1
+    MSTR1ON = 0
+    MSTR2ON = 0
+    MSTR3ON = 0
+    MSTR4ON = 0
+    MSTR5ON = 0
+    MSTR6ON = 0
+END IF
+IF PLX > 354 THEN
+    PLX = -12
+    SCRR = SCRR + 1
+    MSTR1ON = 0
+    MSTR2ON = 0
+    MSTR3ON = 0
+    MSTR4ON = 0
+    MSTR5ON = 0
+    MSTR6ON = 0
+END IF
+
+DO
+    I$ = INKEY$
+    IF I$ = "w" THEN
+        IF SPDBOT = 0 THEN PLDER = 3: PLY = PLY - 1
+        IF SPDBOT = 1 THEN PLDER = 3: SPDPUT = 1
+    END IF
+
+    IF I$ = "x" THEN
+        IF SPDBOT = 0 THEN PLDER = 4: PLY = PLY + 1
+        IF SPDBOT = 1 THEN PLDER = 4: SPDPUT = 1
+    END IF
+    IF I$ = "a" THEN
+        IF SPDBOT = 0 THEN PLDER = 1: PLX = PLX - 1
+        IF SPDBOT = 1 THEN PLDER = 1: SPDPUT = 1
+    END IF
+    IF I$ = "d" THEN
+        IF SPDBOT = 0 THEN PLDER = 2: PLX = PLX + 1
+        IF SPDBOT = 1 THEN PLDER = 2: SPDPUT = 1
+    END IF
+    IF I$ = "s" THEN
+        PLSHT = 1
+        IF PLWGUN = 1 THEN _SNDPLAYFILE "gun.ogg"
+    END IF
+    IF I$ = "f" THEN
+        IF GER > 0 THEN
+            IF PLDER = 1 THEN GERX = PLX: GERY = PLY + 1
+            IF PLDER = 2 THEN GERX = PLX: GERY = PLY + 6
+            IF PLDER = 3 THEN GERX = PLX + 1: GERY = PLY
+            IF PLDER = 4 THEN GERX = PLX + 6: GERY = PLY
+            GER = GER - 1
+            GERTHR = 1
+            GERF = 1
+        END IF
+    END IF
+    IF I$ = "c" THEN
+        IF CROSS > 0 THEN
+            IF PLDER = 1 THEN CROX = PLX: CROY = PLY + 1
+            IF PLDER = 2 THEN CROX = PLX: CROY = PLY + 6
+            IF PLDER = 3 THEN CROX = PLX + 1: CROY = PLY
+            IF PLDER = 4 THEN CROX = PLX + 6: CROY = PLY
+            CROSS = CROSS - 1
+            CROSTHR = 1
+        END IF
+    END IF
+    IF I$ = "e" THEN
+        IF SPLBOK = 1 THEN SPLBOKUSE = 1: _SNDPLAYFILE "magic.ogg"
+    END IF
+    TEM = TEM + 1
+    IF TEM = 3000 THEN TEM = 0: GOTO 100
+LOOP
+
+
+20000
+_SNDPLAY go&
+CLS
+PRINT "You have died!! GAME OVER :("
+
+PRINT "SCORE:"; PLSCO
+CLS
+OPEN "SOSAVEA.DAT" FOR BINARY AS #1
+OPEN "SOSAVEB.DAT" FOR INPUT AS #2
+INPUT "ENTER YOUR NAME"; SCO$
+INPUT #2, SCO1ST$
+INPUT #2, SCO2ND$
+INPUT #2, SCO3RD$
+INPUT #2, SCO4TH$
+INPUT #2, SCO5TH$
+INPUT #2, SCO6TH$
+INPUT #2, SCO7TH$
+INPUT #2, SCO8TH$
+CLOSE #2
+GET #1, 4, SCO1ST
+GET #1, 8, SCO2ND
+GET #1, 12, SCO3RD
+GET #1, 16, SCO4TH
+GET #1, 20, SCO5TH
+GET #1, 24, SCO6TH
+GET #1, 28, SCO7TH
+GET #1, 32, SCO8TH
+IF PLSCO > SCO1ST THEN
+    PRINT "FIRST PLACE!!"
+
+
+    SCO8TH$ = SCO7TH$
+    SCO8TH = SCO7TH
+    SCO7TH$ = SCO6TH$
+    SCO7TH = SCO6TH
+    SCO6TH$ = SCO5TH$
+    SCO6TH = SCO5TH
+    SCO5TH$ = SCO4TH$
+    SCO5TH = SCO4TH
+    SCO4TH$ = SCO3RD$
+    SCO4TH = SCO3RD
+    SCO3RD$ = SCO2ND$
+    SCO3RD = SCO2ND
+    SCO2ND$ = SCO1ST$
+    SCO2ND = SCO1ST
+
+    SCO1ST$ = SCO$
+    SCO1ST = PLSCO
+    PUT #1, 4, SCO1ST
+    PUT #1, 8, SCO2ND
+    PUT #1, 12, SCO3RD
+    PUT #1, 16, SCO4TH
+    PUT #1, 20, SCO5TH
+    PUT #1, 24, SCO6TH
+    PUT #1, 28, SCO7TH
+    PUT #1, 32, SCO8TH
+
+
+
+    GOTO 60000
+END IF
+IF PLSCO > SCO2ND THEN
+    PRINT "SECOND PLACE!"
+    SCO8TH$ = SCO7TH$
+    SCO8TH = SCO7TH
+    SCO7TH$ = SCO6TH$
+    SCO7TH = SCO6TH
+    SCO6TH$ = SCO5TH$
+    SCO6TH = SCO5TH
+    SCO5TH$ = SCO4TH$
+    SCO5TH = SCO4TH
+    SCO4TH$ = SCO3RD$
+    SCO4TH = SCO3RD
+    SCO3RD$ = SCO2ND$
+    SCO3RD = SCO2ND
+
+    SCO2ND$ = SCO$
+    SCO2ND = PLSCO
+
+    PUT #1, 8, SCO2ND
+    PUT #1, 12, SCO3RD
+    PUT #1, 16, SCO4TH
+    PUT #1, 20, SCO5TH
+    PUT #1, 24, SCO6TH
+    PUT #1, 28, SCO7TH
+    PUT #1, 32, SCO8TH
+
+    GOTO 60000
+END IF
+IF PLSCO > SCO3RD THEN
+    PRINT "THIRD PLACE"
+    SCO8TH$ = SCO7TH$
+    SCO8TH = SCO7TH
+    SCO7TH$ = SCO6TH$
+    SCO7TH = SCO6TH
+    SCO6TH$ = SCO5TH$
+    SCO6TH = SCO5TH
+    SCO5TH$ = SCO4TH$
+    SCO5TH = SCO4TH
+    SCO4TH$ = SCO3RD$
+    SCO4TH = SCO3RD
+
+    SCO3RD$ = SCO$
+    SCO3RD = PLSCO
+
+    PUT #1, 12, SCO3RD
+    PUT #1, 16, SCO4TH
+    PUT #1, 20, SCO5TH
+    PUT #1, 24, SCO6TH
+    PUT #1, 28, SCO7TH
+    PUT #1, 32, SCO8TH
+
+    GOTO 60000
+END IF
+IF PLSCO > SCO4TH THEN
+    PRINT "Forth place"
+
+    SCO8TH$ = SCO7TH$
+    SCO8TH = SCO7TH
+    SCO7TH$ = SCO6TH$
+    SCO7TH = SCO6TH
+    SCO6TH$ = SCO5TH$
+    SCO6TH = SCO5TH
+    SCO5TH$ = SCO4TH$
+    SCO5TH = SCO4TH
+
+    SCO4TH$ = SCO$
+    SCO4TH = PLSCO
+
+    PUT #1, 16, SCO4TH
+    PUT #1, 20, SCO5TH
+    PUT #1, 24, SCO6TH
+    PUT #1, 28, SCO7TH
+    PUT #1, 32, SCO8TH
+
+
+    GOTO 60000
+END IF
+IF PLSCO > SCO5TH THEN
+    PRINT "Fifth place"
+    SCO8TH$ = SCO7TH$
+    SCO8TH = SCO7TH
+    SCO7TH$ = SCO6TH$
+    SCO7TH = SCO6TH
+    SCO6TH$ = SCO5TH$
+    SCO6TH = SCO5TH
+
+    SCO5TH$ = SCO$
+    SCO5TH = PLSCO
+
+    PUT #1, 20, SCO5TH
+    PUT #1, 24, SCO6TH
+    PUT #1, 28, SCO7TH
+    PUT #1, 32, SCO8TH
+
+
+    GOTO 60000
+END IF
+IF PLSCO > SCO6TH THEN
+    PRINT "Sixth place"
+    SCO8TH$ = SCO7TH$
+    SCO8TH = SCO7TH
+    SCO7TH$ = SCO6TH$
+    SCO7TH = SCO6TH
+
+    SCO6TH$ = SCO$
+    SCO6TH = PLSCO
+
+    PUT #1, 24, SCO6TH
+    PUT #1, 28, SCO7TH
+    PUT #1, 32, SCO8TH
+
+    GOTO 60000
+END IF
+IF PLSCO > SCO7TH THEN
+    PRINT "Seventh place"
+
+    SCO8TH$ = SCO7TH$
+    SCO8TH = SCO7TH
+
+    SCO7TH$ = SCO$
+    SCO7TH = PLSCO
+
+    PUT #1, 28, SCO7TH
+    PUT #1, 32, SCO8TH
+
+    GOTO 60000
+END IF
+IF PLSCO > SCO8TH THEN
+    PRINT "Eighth place"
+
+    SCO8TH$ = SCO$
+    SCO8TH = PLSCO
+    PUT #1, 32, SCO8TH
+    GOTO 60000
+END IF
+60000
+CLOSE #1
+OPEN "SOSAVEB.DAT" FOR OUTPUT AS #2
+PRINT #2, SCO1ST$
+PRINT #2, SCO2ND$
+PRINT #2, SCO3RD$
+PRINT #2, SCO4TH$
+PRINT #2, SCO5TH$
+PRINT #2, SCO6TH$
+PRINT #2, SCO7TH$
+PRINT #2, SCO8TH$
+CLOSE #2
+PRINT "Score Rankings"
+PRINT "====================================="
+PRINT SCO1ST$; ":"; SCO1ST
+PRINT SCO2ND$; ":"; SCO2ND
+PRINT SCO3RD$; ":"; SCO3RD
+PRINT SCO4TH$; ":"; SCO4TH
+PRINT SCO5TH$; ":"; SCO5TH
+PRINT SCO6TH$; ":"; SCO6TH
+PRINT SCO7TH$; ":"; SCO7TH
+PRINT SCO8TH$; ":"; SCO8TH
+PRINT "======================================"
+PRINT "Type Q to end game"
+PLSCO = 0
+INPUT DUM$
+IF DUM$ = "Q" THEN SYSTEM
+_SNDSTOP go&
+LVL = 0
+GOTO 10
+25000
+_SNDPLAY win&
+CLS
+IF LVL = 8 GOTO 30000
+PRINT "You made it home!! Going to next level! :)"
+PRINT "TIME EARN BONUS:"; EARN
+PLSCO = PLSCO + EARN
+IF LIFE = 30 THEN
+    PRINT "PERFECT!!: 157500"
+    PLSCO = PLSCO + 157500
+END IF
+PRINT "SCORE:"; PLSCO
+INPUT DUM$
+_SNDSTOP win&
+GOTO 10
+30000
+_SNDLOOP te&
+COLOR 15, 11
+CLS
+PRINT "The demons are gone!! The town is saved! :)"
+
+PRINT "SCORE:"; PLSCO
+CLS
+PRINT "You have died!! GAME OVER :("
+
+PRINT "SCORE:"; PLSCO
+CLS
+OPEN "SOSAVEA.DAT" FOR BINARY AS #1
+OPEN "SOSAVEB.DAT" FOR INPUT AS #2
+INPUT "ENTER YOUR NAME"; SCO$
+INPUT #2, SCO1ST$
+INPUT #2, SCO2ND$
+INPUT #2, SCO3RD$
+INPUT #2, SCO4TH$
+INPUT #2, SCO5TH$
+INPUT #2, SCO6TH$
+INPUT #2, SCO7TH$
+INPUT #2, SCO8TH$
+CLOSE #2
+GET #1, 4, SCO1ST
+GET #1, 8, SCO2ND
+GET #1, 12, SCO3RD
+GET #1, 16, SCO4TH
+GET #1, 20, SCO5TH
+GET #1, 24, SCO6TH
+GET #1, 28, SCO7TH
+GET #1, 32, SCO8TH
+IF PLSCO > SCO1ST THEN
+    PRINT "FIRST PLACE!!"
+
+
+    SCO8TH$ = SCO7TH$
+    SCO8TH = SCO7TH
+    SCO7TH$ = SCO6TH$
+    SCO7TH = SCO6TH
+    SCO6TH$ = SCO5TH$
+    SCO6TH = SCO5TH
+    SCO5TH$ = SCO4TH$
+    SCO5TH = SCO4TH
+    SCO4TH$ = SCO3RD$
+    SCO4TH = SCO3RD
+    SCO3RD$ = SCO2ND$
+    SCO3RD = SCO2ND
+    SCO2ND$ = SCO1ST$
+    SCO2ND = SCO1ST
+
+    SCO1ST$ = SCO$
+    SCO1ST = PLSCO
+    PUT #1, 4, SCO1ST
+    PUT #1, 8, SCO2ND
+    PUT #1, 12, SCO3RD
+    PUT #1, 16, SCO4TH
+    PUT #1, 20, SCO5TH
+    PUT #1, 24, SCO6TH
+    PUT #1, 28, SCO7TH
+    PUT #1, 32, SCO8TH
+
+
+
+    GOTO 65000
+END IF
+IF PLSCO > SCO2ND THEN
+    PRINT "SECOND PLACE!"
+    SCO8TH$ = SCO7TH$
+    SCO8TH = SCO7TH
+    SCO7TH$ = SCO6TH$
+    SCO7TH = SCO6TH
+    SCO6TH$ = SCO5TH$
+    SCO6TH = SCO5TH
+    SCO5TH$ = SCO4TH$
+    SCO5TH = SCO4TH
+    SCO4TH$ = SCO3RD$
+    SCO4TH = SCO3RD
+    SCO3RD$ = SCO2ND$
+    SCO3RD = SCO2ND
+
+    SCO2ND$ = SCO$
+    SCO2ND = PLSCO
+
+    PUT #1, 8, SCO2ND
+    PUT #1, 12, SCO3RD
+    PUT #1, 16, SCO4TH
+    PUT #1, 20, SCO5TH
+    PUT #1, 24, SCO6TH
+    PUT #1, 28, SCO7TH
+    PUT #1, 32, SCO8TH
+
+    GOTO 65000
+END IF
+IF PLSCO > SCO3RD THEN
+    PRINT "THIRD PLACE"
+    SCO8TH$ = SCO7TH$
+    SCO8TH = SCO7TH
+    SCO7TH$ = SCO6TH$
+    SCO7TH = SCO6TH
+    SCO6TH$ = SCO5TH$
+    SCO6TH = SCO5TH
+    SCO5TH$ = SCO4TH$
+    SCO5TH = SCO4TH
+    SCO4TH$ = SCO3RD$
+    SCO4TH = SCO3RD
+
+    SCO3RD$ = SCO$
+    SCO3RD = PLSCO
+
+    PUT #1, 12, SCO3RD
+    PUT #1, 16, SCO4TH
+    PUT #1, 20, SCO5TH
+    PUT #1, 24, SCO6TH
+    PUT #1, 28, SCO7TH
+    PUT #1, 32, SCO8TH
+
+    GOTO 65000
+END IF
+IF PLSCO > SCO4TH THEN
+    PRINT "Forth place"
+
+    SCO8TH$ = SCO7TH$
+    SCO8TH = SCO7TH
+    SCO7TH$ = SCO6TH$
+    SCO7TH = SCO6TH
+    SCO6TH$ = SCO5TH$
+    SCO6TH = SCO5TH
+    SCO5TH$ = SCO4TH$
+    SCO5TH = SCO4TH
+
+    SCO4TH$ = SCO$
+    SCO4TH = PLSCO
+
+    PUT #1, 16, SCO4TH
+    PUT #1, 20, SCO5TH
+    PUT #1, 24, SCO6TH
+    PUT #1, 28, SCO7TH
+    PUT #1, 32, SCO8TH
+
+
+    GOTO 65000
+END IF
+IF PLSCO > SCO5TH THEN
+    PRINT "Fifth place"
+    SCO8TH$ = SCO7TH$
+    SCO8TH = SCO7TH
+    SCO7TH$ = SCO6TH$
+    SCO7TH = SCO6TH
+    SCO6TH$ = SCO5TH$
+    SCO6TH = SCO5TH
+
+    SCO5TH$ = SCO$
+    SCO5TH = PLSCO
+
+    PUT #1, 20, SCO5TH
+    PUT #1, 24, SCO6TH
+    PUT #1, 28, SCO7TH
+    PUT #1, 32, SCO8TH
+
+
+    GOTO 65000
+END IF
+IF PLSCO > SCO6TH THEN
+    PRINT "Sixth place"
+    SCO8TH$ = SCO7TH$
+    SCO8TH = SCO7TH
+    SCO7TH$ = SCO6TH$
+    SCO7TH = SCO6TH
+
+    SCO6TH$ = SCO$
+    SCO6TH = PLSCO
+
+    PUT #1, 24, SCO6TH
+    PUT #1, 28, SCO7TH
+    PUT #1, 32, SCO8TH
+
+    GOTO 65000
+END IF
+IF PLSCO > SCO7TH THEN
+    PRINT "Seventh place"
+
+    SCO8TH$ = SCO7TH$
+    SCO8TH = SCO7TH
+
+    SCO7TH$ = SCO$
+    SCO7TH = PLSCO
+
+    PUT #1, 28, SCO7TH
+    PUT #1, 32, SCO8TH
+
+    GOTO 65000
+END IF
+IF PLSCO > SCO8TH THEN
+    PRINT "Eighth place"
+
+    SCO8TH$ = SCO$
+    SCO8TH = PLSCO
+    PUT #1, 32, SCO8TH
+    GOTO 65000
+END IF
+65000
+CLOSE #1
+OPEN "SOSAVEB.DAT" FOR OUTPUT AS #2
+PRINT #2, SCO1ST$
+PRINT #2, SCO2ND$
+PRINT #2, SCO3RD$
+PRINT #2, SCO4TH$
+PRINT #2, SCO5TH$
+PRINT #2, SCO6TH$
+PRINT #2, SCO7TH$
+PRINT #2, SCO8TH$
+CLOSE #2
+PRINT "Score Rankings"
+PRINT "====================================="
+PRINT SCO1ST$; ":"; SCO1ST
+PRINT SCO2ND$; ":"; SCO2ND
+PRINT SCO3RD$; ":"; SCO3RD
+PRINT SCO4TH$; ":"; SCO4TH
+PRINT SCO5TH$; ":"; SCO5TH
+PRINT SCO6TH$; ":"; SCO6TH
+PRINT SCO7TH$; ":"; SCO7TH
+PRINT SCO8TH$; ":"; SCO8TH
+PRINT "======================================"
+
+INPUT DUM$
+CLS
+PRINT "THE END"
+PRINT ""
+PRINT "Game created by: Erich Ronay"
+INPUT DUM$
+SYSTEM
+
+
+
+
+
+
+
