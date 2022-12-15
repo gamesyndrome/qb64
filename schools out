@@ -1335,6 +1335,7 @@ PRINT SCO6TH$; ":"; SCO6TH
 PRINT SCO7TH$; ":"; SCO7TH
 PRINT SCO8TH$; ":"; SCO8TH
 PRINT "======================================"
+PLSCO = 0
 PRINT "Type Q to end game"
 INPUT DUM$
 IF DUM$ = "Q" THEN SYSTEM
