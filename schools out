@@ -73,7 +73,7 @@ IF LVL = 3 THEN
     MSTRSCR = 3
     MSTRK = 2
 
-    MSTRSPD = 5
+    MSTRSPD = 6
 END IF
 IF LVL = 4 THEN
     PRINT "LEVEL 4"
